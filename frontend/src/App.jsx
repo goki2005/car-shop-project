@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import "./style.css";
@@ -19,7 +19,7 @@ function App() {
 
     const addToCart = (car) => {
         setCart([...cart, car]);
-        alert(`${car.name} added to cart `);
+        alert(`${car.name} added to cart`);
     };
 
     const removeFromCart = (id) => {
@@ -27,7 +27,7 @@ function App() {
     };
 
     return (
-        <BrowserRouter>
+        <HashRouter basename="/car-shop-project">
 
             <Navbar cartCount={cart.length} />
 
@@ -35,7 +35,7 @@ function App() {
 
                 <Route
                     path="/"
-                    element={<Navigate to="/home" />}
+                    element={<Navigate to="/home" replace />}
                 />
 
                 <Route
@@ -78,11 +78,6 @@ function App() {
                 />
 
                 <Route
-                    path="/admin"
-                    element={<Admin />}
-                />
-
-                <Route
                     path="/admin-login"
                     element={<AdminLogin />}
                 />
@@ -92,9 +87,14 @@ function App() {
                     element={<Admin />}
                 />
 
+                <Route
+                    path="*"
+                    element={<Navigate to="/home" replace />}
+                />
+
             </Routes>
 
-        </BrowserRouter>
+        </HashRouter>
     );
 }
 
