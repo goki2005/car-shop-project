@@ -5,20 +5,32 @@ function Cars({ addToCart }) {
     const [cars, setCars] = useState([]);
     const [search, setSearch] = useState("");
 
-    // Get cars from backend
-    useEffect(() => {
-
-        fetch("http://localhost:5001/api/cars")
-            .then((response) => response.json())
-            .then((data) => {
-                setCars(data);
-            })
-            .catch((error) => {
-                console.log("Error fetching cars:", error);
-            });
-
-    }, []);
-
+    const [cars, setCars] = useState([
+    {
+        _id: "1",
+        name: "Creta",
+        brand: "Hyundai",
+        price: 1500000,
+        fuel: "Petrol",
+        image: "imagecar.jpg"
+    },
+    {
+        _id: "2",
+        name: "Swift",
+        brand: "Maruti",
+        price: 800000,
+        fuel: "Petrol",
+        image: "imagecar.jpg"
+    },
+    {
+        _id: "3",
+        name: "Nexon",
+        brand: "Tata",
+        price: 1000000,
+        fuel: "Diesel",
+        image: "imagecar.jpg"
+    }
+]);
     // Search cars
     const filteredCars = cars.filter(
         (car) =>
