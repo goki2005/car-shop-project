@@ -18,6 +18,7 @@ function Home() {
                 </p>
 
                 <div className="home-buttons">
+
                     <Link to="/cars">
                         <button className="view-btn">
                             VIEW AVAILABLE CARS →
@@ -29,7 +30,15 @@ function Home() {
                             CONTACT US →
                         </button>
                     </Link>
+
                 </div>
+            </div>
+
+            <div className="home-image">
+                <img
+                    src={`${import.meta.env.BASE_URL}car-home.png`}
+                    alt="Dream Car"
+                />
             </div>
 
         </div>

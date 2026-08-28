@@ -51,7 +51,7 @@ function Cars({ addToCart }) {
 
                 {filteredCars.map((car) => {
 
-                    const imagePath = `${import.meta.env.BASE_URL}cars/${car.image}`;
+                    const imagePath = `${import.meta.env.BASE_URL}${car.image.replace(/^\/+/, "")}`;
                     return (
 
                         <div
@@ -95,9 +95,9 @@ function Cars({ addToCart }) {
                             <div className="car-image-box">
 
                                 <img
-                                   src={imagePath}
-                                   alt={car.name}
-                                   className="car-image"
+                                     src={imagePath}
+                                     alt={car.name}
+                                     className="car-image"
                                 />
 
                             </div>
