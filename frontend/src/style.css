@@ -1575,3 +1575,51 @@ textarea {
         height: 250px;
     }
 }
+/* =========================
+   HOME IMAGE MOBILE FIX
+========================= */
+
+@media (max-width: 768px) {
+
+    .home-page {
+        width: 100%;
+        min-height: calc(100vh - 130px);
+
+        background-image: url("/car-home.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+
+        padding: 40px 25px;
+
+        display: flex;
+        align-items: center;
+    }
+
+    .home-content {
+        width: 100%;
+        padding: 0;
+    }
+}
+
+
+/* SMALL MOBILE */
+
+@media (max-width: 480px) {
+
+    .home-page {
+        min-height: calc(100vh - 140px);
+
+        /* image correct-ah center-la varum */
+        background-size: cover;
+
+        /* car image position adjust */
+        background-position: 65% center;
+
+        padding: 35px 20px;
+    }
+
+    .home-content {
+        width: 100%;
+    }
+}
