@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 
 function Cars({ addToCart }) {
-
-    const [cars, setCars] = useState([]);
     const [search, setSearch] = useState("");
 
     const [cars, setCars] = useState([
