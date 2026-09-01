@@ -33,48 +33,6 @@ app.get("/", (req, res) => {
 });
 
 // =======================
-// GET CARS
-// =======================
-app.get("/api/cars", async (req, res) => {
-    try {
-        const cars = [
-            {
-                _id: "1",
-                name: "Creta",
-                brand: "Hyundai",
-                price: 1500000,
-                fuel: "Petrol",
-                image: "/imagecar.jpg"
-            },
-            {
-                _id: "2",
-                name: "Swift",
-                brand: "Maruti",
-                price: 800000,
-                fuel: "Petrol",
-                image: "/imagecar.jpg"
-            },
-            {
-                _id: "3",
-                name: "Nexon",
-                brand: "Tata",
-                price: 1000000,
-                fuel: "Diesel",
-                image: "/imagecar.jpg"
-            }
-        ];
-
-        res.json(cars);
-
-    } catch (error) {
-        res.status(500).json({
-            message: "Failed to fetch cars",
-            error: error.message
-        });
-    }
-});
-
-// =======================
 // ADD CAR
 // =======================
 
@@ -98,6 +56,20 @@ app.post("/api/cars", async (req, res) => {
     }
 });
 
+
+app.get("/api/cars", async (req, res) => {
+    try {
+        const cars = await Car.find({});
+        res.status(200).json(cars);
+    } catch (error) {
+        console.log("FETCH CARS ERROR:", error);
+
+        res.status(500).json({
+            message: "Failed to fetch cars",
+            error: error.message
+        });
+    }
+});
 // =======================
 // MONGODB
 // =======================
@@ -134,21 +106,21 @@ app.get("/api/seed-cars", async (req, res) => {
                 brand: "Hyundai",
                 price: 1500000,
                 fuel: "Petrol",
-                image: "/imagecar.jpg"
+                image: "/cars/imagecar1.jpg"
             },
             {
                 name: "Swift",
                 brand: "Maruti",
                 price: 800000,
                 fuel: "Petrol",
-                image: "/imagecar.jpg"
+                image: "/cars/imagecar2.jpg"
             },
             {
                 name: "Nexon",
                 brand: "Tata",
                 price: 1000000,
                 fuel: "Diesel",
-                image: "/imagecar.jpg"
+                image: "/cars/imagecar3.jpg"
             }
         ];
 
