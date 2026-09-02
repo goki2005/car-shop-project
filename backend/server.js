@@ -7,6 +7,10 @@ dotenv.config();
 
 const app = express();
 
+// =======================
+// CORS
+// =======================
+
 app.use(
     cors({
         origin: "*",
@@ -45,15 +49,19 @@ app.get("/", (req, res) => {
 
 app.post("/api/cars", async (req, res) => {
     try {
-
-        const car = new Car(req.body);
+        const car = new Car({
+            name: req.body.name,
+            brand: req.body.brand,
+            price: Number(req.body.price),
+            fuel: req.body.fuel,
+            image: req.body.image
+        });
 
         const savedCar = await car.save();
 
         res.status(201).json(savedCar);
 
     } catch (error) {
-
         console.log("ADD ERROR:", error);
 
         res.status(500).json({
@@ -63,11 +71,16 @@ app.post("/api/cars", async (req, res) => {
     }
 });
 
+// =======================
+// GET ALL CARS
+// =======================
 
 app.get("/api/cars", async (req, res) => {
     try {
         const cars = await Car.find({});
+
         res.status(200).json(cars);
+
     } catch (error) {
         console.log("FETCH CARS ERROR:", error);
 
@@ -77,27 +90,13 @@ app.get("/api/cars", async (req, res) => {
         });
     }
 });
-// =======================
-// MONGODB
-// =======================
-
-mongoose
-    .connect(process.env.MONGO_URI)
-    .then(() => {
-        console.log("MongoDB Atlas Connected Successfully 🚗");
-    })
-    .catch((error) => {
-        console.log("MongoDB Connection Error:", error.message);
-    });
 
 // =======================
-// SERVER
+// SEED CARS
 // =======================
 
-const PORT = process.env.PORT || 5000;
 app.get("/api/seed-cars", async (req, res) => {
     try {
-
         const existingCars = await Car.countDocuments();
 
         if (existingCars > 0) {
@@ -140,7 +139,6 @@ app.get("/api/seed-cars", async (req, res) => {
         });
 
     } catch (error) {
-
         console.log("SEED ERROR:", error);
 
         res.status(500).json({
@@ -150,6 +148,21 @@ app.get("/api/seed-cars", async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT} 🚀`);
-});
+// =======================
+// MONGODB + SERVER
+// =======================
+
+const PORT = process.env.PORT || 5000;
+
+mongoose
+    .connect(process.env.MONGO_URI)
+    .then(() => {
+        console.log("MongoDB Atlas Connected Successfully 🚗");
+
+        app.listen(PORT, "0.0.0.0", () => {
+            console.log(`Server running on port ${PORT} 🚀`);
+        });
+    })
+    .catch((error) => {
+        console.log("MongoDB Connection Error:", error.message);
+    });
