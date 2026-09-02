@@ -60,13 +60,13 @@ function AddCar() {
             });
 
         } catch (error) {
-            console.error("ADD CAR ERROR:", error);
+    console.error("ADD CAR ERROR:", error);
 
-            alert(
-                "Backend connection failed ❌\n\n" +
-                error.message
-            );
-        }
+    alert(
+        "Backend connection failed ❌\n\n" +
+        error.message
+    );
+}
     };
 
     return (
