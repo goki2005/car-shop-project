@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 function AddCar() {
-
     const [car, setCar] = useState({
         name: "",
         brand: "",
@@ -21,7 +20,6 @@ function AddCar() {
         e.preventDefault();
 
         try {
-
             const response = await fetch(
                 "https://car-shop-backend-qxoq.onrender.com/api/cars",
                 {
@@ -62,11 +60,11 @@ function AddCar() {
             });
 
         } catch (error) {
-
             console.error("ADD CAR ERROR:", error);
 
             alert(
-                `Backend connection failed ❌\n${error.message}`
+                "Backend connection failed ❌\n\n" +
+                error.message
             );
         }
     };
