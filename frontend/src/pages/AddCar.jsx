@@ -23,14 +23,17 @@ function AddCar() {
         try {
 
             const response = await fetch("https://car-shop-backend-qxoq.onrender.com/api/cars",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(car)
-                }
-            );
+               {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            ...formData,
+            price: Number(formData.price)
+        })
+    }
+);
 
             const data = await response.json();
 
