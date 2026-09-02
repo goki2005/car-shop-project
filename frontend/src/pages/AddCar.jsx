@@ -9,6 +9,8 @@ function AddCar() {
         image: ""
     });
 
+    const [message, setMessage] = useState("");
+
     const handleChange = (e) => {
         setCar({
             ...car,
@@ -18,6 +20,8 @@ function AddCar() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        setMessage("Adding car...");
 
         try {
             const response = await fetch(
@@ -37,19 +41,18 @@ function AddCar() {
                 }
             );
 
-            const data = await response.json();
+            const text = await response.text();
 
-            console.log("ADD CAR RESPONSE:", data);
+            console.log("STATUS:", response.status);
+            console.log("RESPONSE:", text);
 
             if (!response.ok) {
                 throw new Error(
-                    data.error ||
-                    data.message ||
-                    "Failed to add car"
+                    `Server Error ${response.status}: ${text}`
                 );
             }
 
-            alert("Car added successfully 🚗");
+            setMessage("Car added successfully 🚗");
 
             setCar({
                 name: "",
@@ -60,13 +63,12 @@ function AddCar() {
             });
 
         } catch (error) {
-    console.error("ADD CAR ERROR:", error);
+            console.error("ADD CAR ERROR:", error);
 
-    alert(
-        "Backend connection failed ❌\n\n" +
-        error.message
-    );
-}
+            setMessage(
+                `Backend connection failed ❌ ${error.message}`
+            );
+        }
     };
 
     return (
@@ -111,31 +113,17 @@ function AddCar() {
                         onChange={handleChange}
                         required
                     >
-                        <option value="">
-                            Select Fuel
-                        </option>
-
-                        <option value="Petrol">
-                            Petrol
-                        </option>
-
-                        <option value="Diesel">
-                            Diesel
-                        </option>
-
-                        <option value="Electric">
-                            Electric
-                        </option>
-
-                        <option value="Hybrid">
-                            Hybrid
-                        </option>
+                        <option value="">Select Fuel</option>
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Electric">Electric</option>
+                        <option value="Hybrid">Hybrid</option>
                     </select>
 
                     <input
                         type="text"
                         name="image"
-                        placeholder="/cars/imagecar4.jpg"
+                        placeholder="/cars/imagecar5.jpg"
                         value={car.image}
                         onChange={handleChange}
                         required
@@ -146,6 +134,18 @@ function AddCar() {
                     </button>
 
                 </form>
+
+                {message && (
+                    <p
+                        style={{
+                            marginTop: "15px",
+                            textAlign: "center",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        {message}
+                    </p>
+                )}
 
             </div>
 
