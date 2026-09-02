@@ -21,24 +21,30 @@ function AddCar() {
         e.preventDefault();
 
         try {
-
             const response = await fetch("https://car-shop-backend-qxoq.onrender.com/api/cars",
-               {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            ...formData,
-            price: Number(formData.price)
-        })
-    }
-);
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name: car.name,
+                        brand: car.brand,
+                        price: Number(car.price),
+                        fuel: car.fuel,
+                        image: car.image
+                    })
+                }
+            );
 
             const data = await response.json();
 
+            console.log("ADD CAR RESPONSE:", data);
+
             if (!response.ok) {
-                throw new Error(data.message || "Failed to add car");
+                throw new Error(
+                    data.error || data.message || "Failed to add car"
+                );
             }
 
             alert("Car added successfully 🚗");
@@ -52,8 +58,8 @@ function AddCar() {
             });
 
         } catch (error) {
-            console.error(error);
-            alert("Failed to add car");
+            console.error("ADD CAR ERROR:", error);
+            alert("Backend connection failed ❌");
         }
     };
 
@@ -109,7 +115,7 @@ function AddCar() {
                     <input
                         type="text"
                         name="image"
-                        placeholder="/cars/imagecar4.jpg"
+                        placeholder="/cars/imagecar5.jpg"
                         value={car.image}
                         onChange={handleChange}
                         required

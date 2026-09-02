@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 
 function Cart({ cart, removeFromCart }) {
+
     const totalPrice = cart.reduce(
-        (total, car) => total + Number(car.price),
+        (total, car) => total + Number(car.price || 0),
         0
     );
 
@@ -10,80 +11,92 @@ function Cart({ cart, removeFromCart }) {
         <div className="page">
 
             <h1 className="title">
-                 My Cart
+                Shopping Cart 🛒
             </h1>
 
             {cart.length === 0 ? (
 
                 <div className="cart-box">
-
-                    <h2>Your Cart is Empty</h2>
-
-                    <p>
-                        Go to Available Cars and add a car.
-                    </p>
-
-                    <Link to="/cars">
-                        <button>
-                            Browse Cars 
-                        </button>
-                    </Link>
-
+                    <h2>Your cart is empty</h2>
+                    <p>Add some cars to your cart.</p>
                 </div>
 
             ) : (
 
                 <div className="cart-box">
 
-                    {cart.map((car) => (
+                    <h2>Selected Cars</h2>
 
-                        <div
-                            className="cart-item"
-                            key={car._id}
-                        >
+                    <p>
+                        Total Cars: {cart.length}
+                    </p>
 
-                            <div>
-                                <h2>{car.name}</h2>
+                    {cart.map((car) => {
 
-                                <p>
-                                    Brand: {car.brand}
-                                </p>
+                        const imageUrl = car.image
+                            ? car.image.startsWith("http")
+                                ? car.image
+                                : `${import.meta.env.BASE_URL}${car.image.replace(/^\/+/, "")}`
+                            : `${import.meta.env.BASE_URL}cars/imagecar1.jpg`;
 
-                                <p>
-                                    Fuel: {car.fuel}
-                                </p>
-
-                                <h3>
-                                    ₹{Number(car.price).toLocaleString()}
-                                </h3>
-                            </div>
-
-                            <button
-                                onClick={() =>
-                                    removeFromCart(car._id)
-                                }
+                        return (
+                            <div
+                                className="cart-item"
+                                key={car._id}
                             >
-                                Remove
-                            </button>
 
-                        </div>
+                                <div className="cart-image-box">
+                                    <img
+                                        src={imageUrl}
+                                        alt={car.name}
+                                        className="cart-car-image"
+                                    />
+                                </div>
 
-                    ))}
+                                <div className="cart-car-info">
+
+                                    <h2>{car.name}</h2>
+
+                                    <p>
+                                        <strong>Brand:</strong>{" "}
+                                        {car.brand}
+                                    </p>
+
+                                    <p>
+                                        <strong>Fuel:</strong>{" "}
+                                        {car.fuel}
+                                    </p>
+
+                                    <h3>
+                                        ₹{Number(car.price || 0).toLocaleString("en-IN")}
+                                    </h3>
+
+                                </div>
+
+                                <button
+                                    onClick={() => removeFromCart(car._id)}
+                                >
+                                    Remove
+                                </button>
+
+                            </div>
+                        );
+                    })}
 
                     <hr />
 
                     <h2>
-                        Total: ₹{totalPrice.toLocaleString()}
+                        Total Price: ₹{totalPrice.toLocaleString("en-IN")}
                     </h2>
 
-                    <Link to="/address">
-                        <button className="checkout-btn">
-                            Proceed to Address 
-                        </button>
+                    <Link
+                        to="/address"
+                        className="checkout-btn"
+                    >
+                        Checkout 💳
                     </Link>
 
                 </div>
-
             )}
 
         </div>

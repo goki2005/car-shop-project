@@ -18,16 +18,18 @@ function App() {
     const [cart, setCart] = useState([]);
 
     const addToCart = (car) => {
-        setCart([...cart, car]);
-        alert(`${car.name} added to cart`);
+        setCart((prevCart) => [...prevCart, car]);
+        alert(`${car.name} added to cart 🛒`);
     };
 
     const removeFromCart = (id) => {
-        setCart(cart.filter((car) => car._id !== id));
+        setCart((prevCart) =>
+            prevCart.filter((car) => car._id !== id)
+        );
     };
 
     return (
-        <HashRouter basename="/car-shop-project">
+        <HashRouter>
 
             <Navbar cartCount={cart.length} />
 
@@ -46,9 +48,7 @@ function App() {
                 <Route
                     path="/cars"
                     element={
-                        <Cars
-                            addToCart={addToCart}
-                        />
+                        <Cars addToCart={addToCart} />
                     }
                 />
 

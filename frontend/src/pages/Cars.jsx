@@ -1,132 +1,157 @@
 import { useEffect, useState } from "react";
 
 function Cars({ addToCart }) {
-    const [search, setSearch] = useState("");
 
-    const [cars, setCars] = useState([
-    {
-        _id: "1",
-        name: "Creta",
-        brand: "Hyundai",
-        price: 1500000,
-        fuel: "Petrol",
-        image: "imagecar.jpg"
-    },
-    {
-        _id: "2",
-        name: "Swift",
-        brand: "Maruti",
-        price: 800000,
-        fuel: "Petrol",
-        image: "imagecar.jpg"
-    },
-    {
-        _id: "3",
-        name: "Nexon",
-        brand: "Tata",
-        price: 1000000,
-        fuel: "Diesel",
-        image: "imagecar.jpg"
+    const [cars, setCars] = useState([]);
+    const [search, setSearch] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+
+        fetch("https://car-shop-backend-qxoq.onrender.com/api/cars")
+            .then((response) => {
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch cars");
+                }
+
+                return response.json();
+            })
+            .then((data) => {
+
+                console.log("Cars from Render:", data);
+
+                if (Array.isArray(data)) {
+                    setCars(data);
+                } else {
+                    setCars([]);
+                    setError("Invalid car data received");
+                }
+
+                setLoading(false);
+            })
+            .catch((err) => {
+
+                console.error("Cars Error:", err);
+
+                setError(err.message);
+                setLoading(false);
+            });
+
+    }, []);
+
+    const filteredCars = cars.filter((car) => {
+
+        const carName = String(car.name || "").toLowerCase();
+        const carBrand = String(car.brand || "").toLowerCase();
+        const searchText = search.toLowerCase();
+
+        return (
+            carName.includes(searchText) ||
+            carBrand.includes(searchText)
+        );
+    });
+
+    if (loading) {
+        return (
+            <div className="cars-page">
+                <h1>Available Cars 🚗</h1>
+                <p>Loading cars...</p>
+            </div>
+        );
     }
-]);
-    // Search cars
-    const filteredCars = cars.filter(
-        (car) =>
-            car.name.toLowerCase().includes(search.toLowerCase()) ||
-            car.brand.toLowerCase().includes(search.toLowerCase())
-    );
+
+    if (error) {
+        return (
+            <div className="cars-page">
+                <h1>Available Cars 🚗</h1>
+                <p>Error: {error}</p>
+            </div>
+        );
+    }
 
     return (
-        <div className="page">
+        <div className="cars-page">
 
-            {/* Page Title */}
-            <h1 className="title">
-                Available Cars
-            </h1>
+            <h1>Available Cars 🚗</h1>
 
-            {/* Search Box */}
             <div className="search-box">
-
                 <input
                     type="text"
-                    placeholder="Search car or brand..."
+                    placeholder="Search by car name or brand..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
-
             </div>
 
-            {/* Cars */}
-            <div className="car-container">
-
-                {filteredCars.map((car) => {
-
-                    const imagePath = `${import.meta.env.BASE_URL}${car.image.replace(/^\/+/, "")}`;
-                    return (
-
-                        <div
-                            className="car-card"
-                            key={car._id}
-                        >
-
-                            {/* LEFT SIDE */}
-                            <div className="car-info">
-
-                                <h2>
-                                    {car.name}
-                                </h2>
-
-                                <p>
-                                    <strong>Brand:</strong>{" "}
-                                    {car.brand}
-                                </p>
-
-                                <h3>
-                                    ₹
-                                    {Number(car.price).toLocaleString(
-                                        "en-IN"
-                                    )}
-                                </h3>
-
-                                <p>
-                                    <strong>Fuel:</strong>{" "}
-                                    {car.fuel}
-                                </p>
-
-                                <button
-                                    onClick={() => addToCart(car)}
-                                >
-                                    Add to Cart
-                                </button>
-
-                            </div>
-
-                            {/* RIGHT SIDE IMAGE */}
-                            <div className="car-image-box">
-
-                                <img
-                                     src={imagePath}
-                                     alt={car.name}
-                                     className="car-image"
-                                />
-
-                            </div>
-
-                        </div>
-
-                    );
-
-                })}
-
-            </div>
-
-            {/* No Cars */}
-            {filteredCars.length === 0 && (
+            {filteredCars.length === 0 ? (
 
                 <p className="no-result">
                     No cars found
                 </p>
 
+            ) : (
+
+                <div className="cars-container">
+
+                    {filteredCars.map((car) => {
+
+                        const imageUrl = car.image
+                            ? car.image.startsWith("http")
+                                ? car.image
+                                : `${import.meta.env.BASE_URL}${car.image.replace(/^\/+/, "")}`
+                            : "";
+
+                        return (
+                            <div
+                                className="car-card"
+                                key={car._id}
+                            >
+
+                                <div className="car-image-box">
+                                    <img
+                                     src={`${import.meta.env.BASE_URL}${car.image.replace(/^\/+/, "")}`}
+                                     alt={car.name}
+                                     className="car-image"
+                                    />
+
+
+                                </div>
+
+                                <div className="car-info">
+
+                                    <h2>{car.name}</h2>
+
+                                    <p>
+                                        <strong>Brand:</strong>{" "}
+                                        {car.brand}
+                                    </p>
+
+                                    <p>
+                                        <strong>Fuel:</strong>{" "}
+                                        {car.fuel}
+                                    </p>
+
+                                    <p>
+                                        <strong>Price:</strong>{" "}
+                                        ₹{Number(car.price || 0).toLocaleString("en-IN")}
+                                    </p>
+
+                                    <button
+                                        className="add-to-cart-btn"
+                                        onClick={() => addToCart(car)}
+                                    >
+                                        Add to Cart 🛒
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        );
+                    })}
+
+                </div>
             )}
 
         </div>
