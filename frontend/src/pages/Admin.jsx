@@ -11,22 +11,19 @@ function Admin() {
     });
 
     const handleChange = (e) => {
-
         setCar({
             ...car,
             [e.target.name]: e.target.value
         });
-
     };
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
 
         try {
 
             const response = await fetch(
-                "http://localhost:5001/api/cars",
+                "https://car-shop-backend-qxoq.onrender.com/api/cars",
                 {
                     method: "POST",
 
@@ -57,13 +54,13 @@ function Admin() {
 
             } else {
 
-                alert(data.message);
+                alert(data.message || "Failed to add car");
 
             }
 
         } catch (error) {
 
-            console.log(error);
+            console.error("ADD CAR ERROR:", error);
 
             alert("Backend connection failed ❌");
 
@@ -74,7 +71,7 @@ function Admin() {
 
         localStorage.removeItem("isAdmin");
 
-        window.location.href = "/home";
+        window.location.href = "#/home";
 
     };
 
@@ -85,7 +82,7 @@ function Admin() {
 
                 <h1>Admin Panel</h1>
 
-                <h2>Add New Car </h2>
+                <h2>Add New Car</h2>
 
                 <form onSubmit={handleSubmit}>
 
@@ -119,7 +116,7 @@ function Admin() {
                     <input
                         type="text"
                         name="image"
-                        placeholder="Image e.g. image1.jpg"
+                        placeholder="/cars/imagecar5.jpg"
                         value={car.image}
                         onChange={handleChange}
                         required
@@ -129,7 +126,9 @@ function Admin() {
                         name="fuel"
                         value={car.fuel}
                         onChange={handleChange}
+                        required
                     >
+
                         <option value="">
                             Select Fuel
                         </option>
@@ -150,10 +149,14 @@ function Admin() {
                             CNG
                         </option>
 
+                        <option value="Hybrid">
+                            Hybrid
+                        </option>
+
                     </select>
 
                     <button type="submit">
-                        Add Car
+                        Add Car 🚗
                     </button>
 
                 </form>
