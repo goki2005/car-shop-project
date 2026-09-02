@@ -21,7 +21,9 @@ function AddCar() {
         e.preventDefault();
 
         try {
-            const response = await fetch("https://car-shop-backend-qxoq.onrender.com/api/cars",
+
+            const response = await fetch(
+                "https://car-shop-backend-qxoq.onrender.com/api/cars",
                 {
                     method: "POST",
                     headers: {
@@ -43,7 +45,9 @@ function AddCar() {
 
             if (!response.ok) {
                 throw new Error(
-                    data.error || data.message || "Failed to add car"
+                    data.error ||
+                    data.message ||
+                    "Failed to add car"
                 );
             }
 
@@ -58,8 +62,12 @@ function AddCar() {
             });
 
         } catch (error) {
+
             console.error("ADD CAR ERROR:", error);
-            alert("Backend connection failed ❌");
+
+            alert(
+                `Backend connection failed ❌\n${error.message}`
+            );
         }
     };
 
@@ -105,17 +113,31 @@ function AddCar() {
                         onChange={handleChange}
                         required
                     >
-                        <option value="">Select Fuel</option>
-                        <option value="Petrol">Petrol</option>
-                        <option value="Diesel">Diesel</option>
-                        <option value="Electric">Electric</option>
-                        <option value="Hybrid">Hybrid</option>
+                        <option value="">
+                            Select Fuel
+                        </option>
+
+                        <option value="Petrol">
+                            Petrol
+                        </option>
+
+                        <option value="Diesel">
+                            Diesel
+                        </option>
+
+                        <option value="Electric">
+                            Electric
+                        </option>
+
+                        <option value="Hybrid">
+                            Hybrid
+                        </option>
                     </select>
 
                     <input
                         type="text"
                         name="image"
-                        placeholder="/cars/imagecar5.jpg"
+                        placeholder="/cars/imagecar4.jpg"
                         value={car.image}
                         onChange={handleChange}
                         required
