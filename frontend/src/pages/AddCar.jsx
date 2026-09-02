@@ -2,7 +2,7 @@ import { useState } from "react";
 
 function AddCar() {
 
-    const [formData, setFormData] = useState({
+    const [car, setCar] = useState({
         name: "",
         brand: "",
         price: "",
@@ -11,8 +11,8 @@ function AddCar() {
     });
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
+        setCar({
+            ...car,
             [e.target.name]: e.target.value
         });
     };
@@ -22,41 +22,35 @@ function AddCar() {
 
         try {
 
-            const response = await fetch(
-                "http://localhost:5001/api/cars",
+            const response = await fetch("https://car-shop-backend-qxoq.onrender.com/api/cars",
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({
-                        ...formData,
-                        price: Number(formData.price)
-                    })
+                    body: JSON.stringify(car)
                 }
             );
 
             const data = await response.json();
 
-            if (response.ok) {
-
-                alert("Car added successfully ");
-
-                setFormData({
-                    name: "",
-                    brand: "",
-                    price: "",
-                    fuel: "",
-                    image: ""
-                });
-
-            } else {
-                alert(data.message);
+            if (!response.ok) {
+                throw new Error(data.message || "Failed to add car");
             }
 
+            alert("Car added successfully 🚗");
+
+            setCar({
+                name: "",
+                brand: "",
+                price: "",
+                fuel: "",
+                image: ""
+            });
+
         } catch (error) {
-            console.log(error);
-            alert("Something went wrong");
+            console.error(error);
+            alert("Failed to add car");
         }
     };
 
@@ -65,7 +59,7 @@ function AddCar() {
 
             <div className="add-car-form">
 
-                <h1>Add New Car </h1>
+                <h1>Add New Car 🚗</h1>
 
                 <form onSubmit={handleSubmit}>
 
@@ -73,7 +67,7 @@ function AddCar() {
                         type="text"
                         name="name"
                         placeholder="Car Name"
-                        value={formData.name}
+                        value={car.name}
                         onChange={handleChange}
                         required
                     />
@@ -82,7 +76,7 @@ function AddCar() {
                         type="text"
                         name="brand"
                         placeholder="Brand"
-                        value={formData.brand}
+                        value={car.brand}
                         onChange={handleChange}
                         required
                     />
@@ -91,22 +85,14 @@ function AddCar() {
                         type="number"
                         name="price"
                         placeholder="Price"
-                        value={formData.price}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input
-                        type="text"
-                        name="image"
-                        placeholder="Car Image URL"
-                        value={formData.image}
+                        value={car.price}
                         onChange={handleChange}
                         required
                     />
 
                     <select
                         name="fuel"
-                        value={formData.fuel}
+                        value={car.fuel}
                         onChange={handleChange}
                         required
                     >
@@ -117,8 +103,17 @@ function AddCar() {
                         <option value="Hybrid">Hybrid</option>
                     </select>
 
+                    <input
+                        type="text"
+                        name="image"
+                        placeholder="/cars/imagecar4.jpg"
+                        value={car.image}
+                        onChange={handleChange}
+                        required
+                    />
+
                     <button type="submit">
-                        Add Car
+                        Add Car 🚗
                     </button>
 
                 </form>
