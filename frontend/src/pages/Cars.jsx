@@ -10,6 +10,7 @@ function Cars({ addToCart }) {
     useEffect(() => {
 
         fetch("https://car-shop-backend-qxoq.onrender.com/api/cars")
+
             .then((response) => {
 
                 if (!response.ok) {
@@ -18,6 +19,7 @@ function Cars({ addToCart }) {
 
                 return response.json();
             })
+
             .then((data) => {
 
                 console.log("Cars from Render:", data);
@@ -31,6 +33,7 @@ function Cars({ addToCart }) {
 
                 setLoading(false);
             })
+
             .catch((err) => {
 
                 console.error("Cars Error:", err);
@@ -54,35 +57,46 @@ function Cars({ addToCart }) {
     });
 
     if (loading) {
+
         return (
             <div className="cars-page">
+
                 <h1>Available Cars 🚗</h1>
+
                 <p>Loading cars...</p>
+
             </div>
         );
     }
 
     if (error) {
+
         return (
             <div className="cars-page">
+
                 <h1>Available Cars 🚗</h1>
+
                 <p>Error: {error}</p>
+
             </div>
         );
     }
 
     return (
+
         <div className="cars-page">
 
             <h1>Available Cars 🚗</h1>
 
             <div className="search-box">
+
                 <input
                     type="text"
                     placeholder="Search by car name or brand..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
+
             </div>
 
             {filteredCars.length === 0 ? (
@@ -103,19 +117,24 @@ function Cars({ addToCart }) {
                                 : `${import.meta.env.BASE_URL}${car.image.replace(/^\/+/, "")}`
                             : "";
 
+                        console.log("Car:", car.name);
+                        console.log("Image:", car.image);
+                        console.log("Image URL:", imageUrl);
+
                         return (
+
                             <div
                                 className="car-card"
                                 key={car._id}
                             >
 
                                 <div className="car-image-box">
-                                    <img
-                                     src={`${import.meta.env.BASE_URL}${car.image.replace(/^\/+/, "")}`}
-                                     alt={car.name}
-                                     className="car-image"
-                                    />
 
+                                    <img
+                                        src={imageUrl}
+                                        alt={car.name}
+                                        className="car-image"
+                                    />
 
                                 </div>
 
