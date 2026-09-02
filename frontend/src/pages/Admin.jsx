@@ -22,8 +22,7 @@ function Admin() {
 
         try {
 
-            const response = await fetch(
-                "https://car-shop-backend-qxoq.onrender.com/api/cars",
+            const response = await fetch("https://car-shop-backend-qxoq.onrender.com/api/cars",
                 {
                     method: "POST",
 
